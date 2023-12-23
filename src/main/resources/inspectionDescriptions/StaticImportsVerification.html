@@ -1,0 +1,15 @@
+<html lang="en">
+<body>
+Verify that some method calls are imported statically. At the moment, as per BCP bank rules, this
+looks for:
+<ul>
+    <li>Assertions methods (like <i>Assertions.assertTrue</i> )</li>
+    <li>Mockito general methods (like <i>Mockito.when()</i> )</li>
+    <li>Mockito matching methods (like <i>Mockito.isA()</i> )</li>
+    <li>Mockito's <i>any()</i> method which is not allowed</li>
+</ul>
+<p>
+    Warning: This plugin was made to work exclusively with the codebase of the BCP bank of Peru.
+</p>
+</body>
+</html>

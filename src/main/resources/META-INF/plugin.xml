@@ -1,0 +1,46 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.duberlyguarnizo.BcpCommitHelper</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>Bcp Commit Helper</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="duberlygfr@gmail.com" url="https://www.duberlyguarnizo.com">Duberly Guarnizo</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    Show an error or warning inspection whenever the BCP clean code rules are broken while testing.
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+    <depends>com.intellij.modules.java-capable</depends>
+    <depends>com.intellij.java</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+
+        <localInspection
+                implementationClass="com.duberlyguarnizo.bcpcommithelper.inspections.DisplayNameVerificationInspection"
+                language="JAVA"
+                enabledByDefault="true" level="WARNING" displayName="Bcp - naming conventions"
+                groupName="Bcp"/>
+        <localInspection
+                implementationClass="com.duberlyguarnizo.bcpcommithelper.inspections.StaticImportsVerificationInspection"
+                language="JAVA"
+                enabledByDefault="true" level="WARNING" displayName="Bcp - static imports"
+                groupName="Bcp"/>
+        <localInspection
+                implementationClass="com.duberlyguarnizo.bcpcommithelper.inspections.OtherVerificationInspections"
+                language="JAVA"
+                enabledByDefault="true" level="WARNING" displayName="Bcp - other rules"
+                groupName="Bcp"/>
+    </extensions>
+</idea-plugin>
