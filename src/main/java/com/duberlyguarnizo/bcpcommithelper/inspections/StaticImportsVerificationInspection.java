@@ -1,5 +1,6 @@
 package com.duberlyguarnizo.bcpcommithelper.inspections;
 
+import com.duberlyguarnizo.bcpcommithelper.util.MessageProvider;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemsHolder;
 import com.intellij.psi.JavaElementVisitor;
@@ -21,33 +22,32 @@ public class StaticImportsVerificationInspection extends LocalInspectionTool {
         if (method != null) {
           String qualifiedName = method.getContainingClass().getQualifiedName();
           String canonicalText = expression.getMethodExpression().getCanonicalText();
-          if (isJUnit5AssertionMethod(method, qualifiedName) && isNotStaticallyAssertionImported(canonicalText)) {
+          if (isJUnit5AssertionMethod(method, qualifiedName) &&
+              isNotStaticallyAssertionImported(canonicalText)) {
             holder.registerProblem(expression,
-                "BCP: La llamada al metodo de Assertions debe ser estatica");
+                MessageProvider.getMessage("insp_assertions_should_be_static"));
           }
           if (isMockitoMethod(method, qualifiedName)) {
             if (isNotStaticallyMockitoImported(canonicalText)) {
               holder.registerProblem(expression,
-                  "BCP: La llamada al metodo de Mockito debe ser estatica");
+                  MessageProvider.getMessage("insp_mockito_should_be_static"));
             }
             if (isMockitoUnAllowedMethod(expression)) {
               holder.registerProblem(expression,
-                  "BCP: Usa una alternativa a any() que especifique el tipo de objeto");
+                  MessageProvider.getMessage("insp_mockito_any_should_not_be_used"));
             }
           }
-
         }
       }
     };
   }
 
   private boolean isJUnit5AssertionMethod(PsiMethod method, String qualifiedName) {
-    // Check if the method belongs to JUnit5 Assertions class
-    return method.getContainingClass() != null && "org.junit.jupiter.api.Assertions".equals(qualifiedName);
+    return method.getContainingClass() != null &&
+           "org.junit.jupiter.api.Assertions".equals(qualifiedName);
   }
 
   private boolean isMockitoMethod(PsiMethod method, String qualifiedName) {
-    // Check if the method belongs to JUnit5 Assertions class
     return method.getContainingClass() != null && (
         "org.mockito.Mockito".equals(qualifiedName) ||
         "org.mockito.ArgumentMatchers".equals(qualifiedName)

@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.duberlyguarnizo"
-version = "1.0.3-SNAPSHOT"
+version = "1.0.4-SNAPSHOT"
 
 repositories {
   mavenCentral()
@@ -27,12 +27,10 @@ tasks {
     sourceCompatibility = "17"
     targetCompatibility = "17"
   }
-  //withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-  //  kotlinOptions.jvmTarget = "17"
-  //}
+
 
   patchPluginXml {
-    sinceBuild.set("229")
+    sinceBuild.set("221.*")
     untilBuild.set("241.*")
   }
 

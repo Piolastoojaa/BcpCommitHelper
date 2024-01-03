@@ -4,11 +4,13 @@ Validate some naming conventions for unit tests, according to BCP bank rules. Cu
 <ul>
     <li><i>@DisplayName</i> property must exist for every test</li>
     <li><i>@DisplayName</i> string must start with uppercase</li>
+    <li><i>@DisplayName</i> string must not contain multiple spaces within</li>
     <li><i>@DisplayName</i> string must not have spaces at the end or start of the string</li>
     <li>Method name must contain the word 'When'</li>
     <li>Method name must start with lowercase</li>
-    <li>Method name must correspond to the display name, but with spaces</li>
+    <li>Method name must correspond to the display name, but without the spaces</li>
 </ul>
+<p>This rules apply to methods annotated with <i>@Test</i> and <i>@ParameterizedTest</i></p>
 
 <p>
     Warning: This plugin was made to work exclusively with the codebase of the BCP bank of Peru.

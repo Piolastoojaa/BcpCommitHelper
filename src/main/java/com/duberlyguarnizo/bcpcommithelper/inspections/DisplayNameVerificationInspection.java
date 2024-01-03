@@ -1,5 +1,6 @@
 package com.duberlyguarnizo.bcpcommithelper.inspections;
 
+import com.duberlyguarnizo.bcpcommithelper.util.MessageProvider;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -25,12 +26,13 @@ public class DisplayNameVerificationInspection extends LocalInspectionTool {
                                                                      + ".DisplayName");
           if (displayNameAnnotation == null) {
             holder.registerProblem(method.getIdentifyingElement(),
-                "BCP: Falta la anotacion @DisplayName",
+                MessageProvider.getMessage("insp_display_annotation_missing"),
                 ProblemHighlightType.ERROR);
           } else {
             String displayNameValue = getDisplayNameValue(displayNameAnnotation, holder);
             if (!displayNameValue.isEmpty()) {
-              String expectedMethodName = generateExpectedMethodName(displayNameValue);
+              String expectedMethodName = generateExpectedMethodName(displayNameValue,
+                  displayNameAnnotation, holder);
               var displayUpper = verifyDisplayNameStartsWithUpperCase(displayNameValue,
                   displayNameAnnotation, holder);
               var methodLower = verifyMethodNameStartsWithLowerCase(method, holder);
@@ -52,7 +54,7 @@ public class DisplayNameVerificationInspection extends LocalInspectionTool {
                                                         @NotNull ProblemsHolder holder) {
     if (!expectedMethodName.equals(method.getName())) {
       holder.registerProblem(displayNameAnnotation.getNavigationElement(),
-          "BCP: DisplayName no corresponde con el nombre del metodo",
+          MessageProvider.getMessage("insp_display_does_not_equal_method"),
           ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
     }
   }
@@ -62,7 +64,7 @@ public class DisplayNameVerificationInspection extends LocalInspectionTool {
                                                        @NotNull ProblemsHolder holder) {
     if (!startsWithUppercase(displayNameValue)) {
       holder.registerProblem(displayNameAnnotation.getNavigationElement(),
-          "BCP: DisplayName debe iniciar con mayuscula",
+          MessageProvider.getMessage("insp_display_must_start_uppercase"),
           ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
       return false;
     }
@@ -73,7 +75,7 @@ public class DisplayNameVerificationInspection extends LocalInspectionTool {
                                                       @NotNull ProblemsHolder holder) {
     if (startsWithUppercase(method.getName())) {
       holder.registerProblem(method.getIdentifyingElement(),
-          "BCP: Nombre del metodo debe iniciar con minuscula",
+          MessageProvider.getMessage("insp_method_must_start_lowercase"),
           ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
       return false;
     }
@@ -83,22 +85,32 @@ public class DisplayNameVerificationInspection extends LocalInspectionTool {
   private void verifyNameContainsWhen(@NotNull PsiMethod method, @NotNull ProblemsHolder holder) {
     if (!hasWhenWord(method.getName())) {
       holder.registerProblem(method.getIdentifyingElement(),
-          "BCP: Nombre del metodo debe contener la palabra en ingles 'when'",
+          MessageProvider.getMessage("insp_when_word_missing"),
           ProblemHighlightType.GENERIC_ERROR_OR_WARNING);
     }
   }
 
   private boolean isJUnit5TestMethod(PsiMethod method) {
     PsiAnnotation testAnnotation = method.getAnnotation("org.junit.jupiter.api.Test");
-    return testAnnotation != null;
+    PsiAnnotation parameterizedTestAnnotation = method.getAnnotation(
+        "org.junit.jupiter.params.ParameterizedTest");
+    return testAnnotation != null || parameterizedTestAnnotation != null;
   }
 
-  private String generateExpectedMethodName(String displayName) {
+  private String generateExpectedMethodName(String displayName,
+                                            PsiAnnotation displayNameAnnotation,
+                                            ProblemsHolder holder) {
     //replace hyphen
     displayName = displayName.replace("-", " ");
     // split into single words when space or uppercase
+    if (displayName.contains("  ")) {
+      holder.registerProblem(displayNameAnnotation.getNavigationElement(),
+          MessageProvider.getMessage("insp_display_no_multiple_spaces"),
+          ProblemHighlightType.WEAK_WARNING);
+    }
     var wordsArray = displayName.split("(?=[A-Z\\s])");
     StringBuilder builder = new StringBuilder();
+
     for (String word : wordsArray) {
       if (word.equals(" ")) {
         continue;
@@ -149,7 +161,7 @@ public class DisplayNameVerificationInspection extends LocalInspectionTool {
         return result;
       }
       holder.registerProblem(displayNameAnnotation.getNavigationElement(),
-          "BCP: DisplayName no debe contener espacios en blanco al inicio o final",
+          MessageProvider.getMessage("insp_display_no_spaces_start_or_end"),
           ProblemHighlightType.WEAK_WARNING);
     }
     return "";

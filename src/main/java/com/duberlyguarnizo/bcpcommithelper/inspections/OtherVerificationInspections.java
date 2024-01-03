@@ -1,5 +1,6 @@
 package com.duberlyguarnizo.bcpcommithelper.inspections;
 
+import com.duberlyguarnizo.bcpcommithelper.util.MessageProvider;
 import com.intellij.codeInspection.LocalInspectionTool;
 import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.codeInspection.ProblemsHolder;
@@ -30,8 +31,7 @@ public class OtherVerificationInspections extends LocalInspectionTool {
             String methodName = method.getName();
             if (methodName.equals(INIT_MOCKS_METHOD) || methodName.equals(OPEN_MOCKS_METHOD)) {
               holder.registerProblem(expression,
-                  "BCP: No se debe usar el metodo " + methodName
-                  + "() de Mockito. En su lugar, usa @ExtendWith() en la clase.",
+                  MessageProvider.getMessage("insp_mockito_not_allowed_method", methodName),
                   ProblemHighlightType.WARNING);
             }
           }
