@@ -27,7 +27,7 @@ public class AnemicTestVerificationInspection extends LocalInspectionTool {
           if (codeBlock != null) {
             codeBlock.accept(new JavaRecursiveElementVisitor() {
               @Override
-              public void visitMethodCallExpression(PsiMethodCallExpression expression) {
+              public void visitMethodCallExpression(@NotNull PsiMethodCallExpression expression) {
                 super.visitMethodCallExpression(expression);
                 PsiReferenceExpression referenceExpression = expression.getMethodExpression();
                 PsiMethod method = (PsiMethod) referenceExpression.resolve();
@@ -58,7 +58,7 @@ public class AnemicTestVerificationInspection extends LocalInspectionTool {
       }
 
       @Override
-      public void visitElement(PsiElement element) {
+      public void visitElement(@NotNull PsiElement element) {
         super.visitElement(element);
         // Reset the assertion count outside of test method context
         if (!(element instanceof PsiMethod) && !callIsInsideTestMethod) {

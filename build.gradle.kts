@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "com.duberlyguarnizo"
-version = "1.0.4-SNAPSHOT"
+version = "1.0.4.1-SNAPSHOT"
 
 repositories {
   mavenCentral()
@@ -30,7 +30,7 @@ tasks {
 
 
   patchPluginXml {
-    sinceBuild.set("221.*")
+    sinceBuild.set("201.*")
     untilBuild.set("241.*")
   }
 
@@ -47,6 +47,13 @@ tasks {
   buildSearchableOptions {
       enabled = false
   }
+  idea {
+      module {
+          isDownloadJavadoc = true
+          isDownloadSources = true
+      }
+  }
+
 
 
 }

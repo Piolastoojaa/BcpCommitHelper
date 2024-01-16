@@ -28,15 +28,23 @@ public class StaticImportsVerificationInspection extends LocalInspectionTool {
                 MessageProvider.getMessage("insp_assertions_should_be_static"));
           }
           if (isMockitoMethod(method, qualifiedName)) {
-            if (isNotStaticallyMockitoImported(canonicalText)) {
-              holder.registerProblem(expression,
-                  MessageProvider.getMessage("insp_mockito_should_be_static"));
-            }
-            if (isMockitoUnAllowedMethod(expression)) {
-              holder.registerProblem(expression,
-                  MessageProvider.getMessage("insp_mockito_any_should_not_be_used"));
-            }
+            verifyStaticImports(expression, canonicalText);
+            verifyMockitoNotAllowedMethodNotUsed(expression);
           }
+        }
+      }
+
+      private void verifyMockitoNotAllowedMethodNotUsed(@NotNull PsiMethodCallExpression expression) {
+        if (isMockitoUnAllowedMethod(expression)) {
+          holder.registerProblem(expression,
+              MessageProvider.getMessage("insp_mockito_any_should_not_be_used"));
+        }
+      }
+
+      private void verifyStaticImports(@NotNull PsiMethodCallExpression expression, String canonicalText) {
+        if (isNotStaticallyMockitoImported(canonicalText)) {
+          holder.registerProblem(expression,
+              MessageProvider.getMessage("insp_mockito_should_be_static"));
         }
       }
     };

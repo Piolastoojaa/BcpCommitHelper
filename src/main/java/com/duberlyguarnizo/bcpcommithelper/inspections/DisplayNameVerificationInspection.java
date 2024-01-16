@@ -30,18 +30,22 @@ public class DisplayNameVerificationInspection extends LocalInspectionTool {
                 ProblemHighlightType.ERROR);
           } else {
             String displayNameValue = getDisplayNameValue(displayNameAnnotation, holder);
-            if (!displayNameValue.isEmpty()) {
-              String expectedMethodName = generateExpectedMethodName(displayNameValue,
-                  displayNameAnnotation, holder);
-              var displayUpper = verifyDisplayNameStartsWithUpperCase(displayNameValue,
-                  displayNameAnnotation, holder);
-              var methodLower = verifyMethodNameStartsWithLowerCase(method, holder);
-              if (displayUpper && methodLower) {
-                verifyDisplayNameEqualsMethodName(method, expectedMethodName, displayNameAnnotation,
-                    holder);
-              }
-            }
+            verifyNameAndDisplayNameMatches(method, displayNameValue, displayNameAnnotation);
             verifyNameContainsWhen(method, holder);
+          }
+        }
+      }
+
+      private void verifyNameAndDisplayNameMatches(@NotNull PsiMethod method, String displayNameValue, PsiAnnotation displayNameAnnotation) {
+        if (!displayNameValue.isEmpty()) {
+          String expectedMethodName = generateExpectedMethodName(displayNameValue,
+              displayNameAnnotation, holder);
+          var displayUpper = verifyDisplayNameStartsWithUpperCase(displayNameValue,
+              displayNameAnnotation, holder);
+          var methodLower = verifyMethodNameStartsWithLowerCase(method, holder);
+          if (displayUpper && methodLower) {
+            verifyDisplayNameEqualsMethodName(method, expectedMethodName, displayNameAnnotation,
+                holder);
           }
         }
       }
