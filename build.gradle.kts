@@ -1,59 +1,59 @@
 plugins {
-  id("java")
-  id("org.jetbrains.kotlin.jvm") version "1.9.20"
-  id("org.jetbrains.intellij") version "1.16.0"
-  id("idea")
+    id("java")
+    id("org.jetbrains.kotlin.jvm") version "1.9.20"
+    id("org.jetbrains.intellij.platform") version "2.1.0"
+    id("idea")
 }
 
 group = "com.duberlyguarnizo"
-version = "1.0.4.1-SNAPSHOT"
+version = "1.0.4.2-SNAPSHOT"
 
 repositories {
-  mavenCentral()
+    mavenCentral()
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
-// Configure Gradle IntelliJ Plugin
-// Read more: https://plugins.jetbrains.com/docs/intellij/tools-gradle-intellij-plugin.html
-intellij {
-  version.set("2023.1.5")
-  type.set("IC") // Target IDE Platform
+dependencies {
+    intellijPlatform {
+        bundledPlugin("com.intellij.java")
+        create("IC", "2023.1.5")
+        instrumentationTools()
+    }
+}
 
-  plugins.set(listOf("java"))
+intellijPlatform {
+    buildSearchableOptions = false
+    pluginConfiguration {
+        ideaVersion {
+            sinceBuild = "231"
+        }
+    }
+    publishing {
+        token = System.getenv("PUBLISH_TOKEN")
+    }
+    signing {
+        privateKey = System.getenv("PRIVATE_KEY")
+        password = System.getenv("PRIVATE_KEY_PASSWORD")
+        certificateChain = System.getenv("CERTIFICATE_CHAIN")
+    }
+
 }
 
 tasks {
-  // Set the JVM compatibility versions
-  withType<JavaCompile> {
-    sourceCompatibility = "17"
-    targetCompatibility = "17"
-  }
+    // Set the JVM compatibility versions
+    withType<JavaCompile> {
+        sourceCompatibility = "17"
+        targetCompatibility = "17"
+    }
 
-
-  patchPluginXml {
-    sinceBuild.set("201.*")
-    untilBuild.set("241.*")
-  }
-
-  signPlugin {
-    certificateChain.set(System.getenv("CERTIFICATE_CHAIN"))
-    privateKey.set(System.getenv("PRIVATE_KEY"))
-    password.set(System.getenv("PRIVATE_KEY_PASSWORD"))
-  }
-
-  publishPlugin {
-    token.set(System.getenv("PUBLISH_TOKEN"))
-  }
-
-  buildSearchableOptions {
-      enabled = false
-  }
-  idea {
-      module {
-          isDownloadJavadoc = true
-          isDownloadSources = true
-      }
-  }
-
+    idea {
+        module {
+            isDownloadJavadoc = true
+            isDownloadSources = true
+        }
+    }
 
 
 }

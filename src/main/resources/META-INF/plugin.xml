@@ -52,5 +52,10 @@
                 language="JAVA"
                 enabledByDefault="true" level="WARNING" displayName="Bcp - anemic tests"
                 groupName="Bcp"/>
+        <localInspection
+                implementationClass="com.duberlyguarnizo.bcpcommithelper.inspections.UnwantedPomPropertiesInspection"
+                language="XML"
+                enabledByDefault="true" level="WARNING" displayName="Bcp - Unwanted POM properties"
+                groupName="Bcp"/>
     </extensions>
 </idea-plugin>
