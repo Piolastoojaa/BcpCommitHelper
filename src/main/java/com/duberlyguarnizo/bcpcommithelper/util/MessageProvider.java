@@ -5,12 +5,14 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class MessageProvider {
-  private static ResourceBundle messages;
+  private static final ResourceBundle messages;
 
   static {
-    //TODO: get default or configure
-    messages = ResourceBundle.getBundle("inspection_messages", new Locale("es"));
+    var locale = Locale.forLanguageTag("es");
+    messages = ResourceBundle.getBundle("inspection_messages", locale);
   }
+
+  private MessageProvider(){}
 
   public static String getMessage(String key, Object... args) {
     String message = messages.getString(key);

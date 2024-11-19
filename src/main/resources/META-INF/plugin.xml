@@ -20,13 +20,14 @@
     <!-- Product and plugin compatibility requirements.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
     <depends>com.intellij.modules.platform</depends>
-    <depends>com.intellij.modules.java-capable</depends>
+<!--    <depends>com.intellij.modules.java-capable</depends>-->
     <depends>com.intellij.java</depends>
+
+    <idea-version since-build="231" until-build="243.*"/>
 
     <!-- Extension points defined by the plugin.
          Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
     <extensions defaultExtensionNs="com.intellij">
-
         <localInspection
                 implementationClass="com.duberlyguarnizo.bcpcommithelper.inspections.DisplayNameVerificationInspection"
                 language="JAVA"

@@ -1,12 +1,12 @@
 plugins {
     id("java")
-    id("org.jetbrains.kotlin.jvm") version "1.9.20"
+    id("org.jetbrains.kotlin.jvm") version "2.0.21"
     id("org.jetbrains.intellij.platform") version "2.1.0"
     id("idea")
 }
 
 group = "com.duberlyguarnizo"
-version = "1.0.4.2-SNAPSHOT"
+version = "1.0.6-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -28,6 +28,7 @@ intellijPlatform {
     pluginConfiguration {
         ideaVersion {
             sinceBuild = "231"
+            untilBuild = "243.*"
         }
     }
     publishing {
